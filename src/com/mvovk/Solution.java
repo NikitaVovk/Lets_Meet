@@ -6,128 +6,75 @@ import com.mvovk.models.TimeStamps;
 import java.util.ArrayList;
 
 public class Solution {
+    Calendar c1,c2;
+    long meetingDuration;
 
+    public Solution(Calendar c1, Calendar c2, String meetingDuration) {
+        this.c1 = c1;
+        this.c2 = c2;
+        this.meetingDuration = getSeconds(meetingDuration);
+    }
 
-
-
-//    public void getSolution(Calendar c1, Calendar c2){
-//        ArrayList<TimeStamps> meeting = new ArrayList<>();
-//
-//        long workStart = 0;
-//        long workEnd = 0;
-//
-//        if ((getSeconds(c1.getWorking_hours().getStart())<getSeconds(c2.getWorking_hours().getEnd()))&&
-//                (getSeconds(c2.getWorking_hours().getStart())<getSeconds(c1.getWorking_hours().getEnd()))){
-//            workStart = getMax(getSeconds(c1.getWorking_hours().getStart()),getSeconds(c2.getWorking_hours().getStart()));
-//            workEnd = getMin(getSeconds(c1.getWorking_hours().getEnd()),getSeconds(c2.getWorking_hours().getEnd()));
-//        }
-//
-//
-//        System.out.println(toUsualFormat(workStart));
-//        System.out.println(toUsualFormat(workEnd));
-//
-//
-//        System.out.println("meeting");
-//
-//
-//    }
-
-
-    public void getSolution(Calendar c1, Calendar c2){
+    public ArrayList<TimeStamps> getSolution(){
         ArrayList<TimeStamps> meeting = new ArrayList<>();
-        long tmpMax = getMax(getSeconds(c1.getWorking_hours().getStart()), getSeconds(c2.getWorking_hours().getStart()));
+        long tmpMax = getMax((c1.getWorking_hours().getStartSec()), (c2.getWorking_hours().getStartSec()));
         long tmpMin = 0;
         long dif;
         int i = 0, j = 0;
 
         while (i<c1.getPlanned_meeting().size()&&j<c2.getPlanned_meeting().size()){
-            System.out.println("i = "+ i +"   j = "+j);
-            tmpMin = getMin(getSeconds(c1.getPlanned_meeting().get(i).getStart()),getSeconds(c2.getPlanned_meeting().get(j).getStart()));
-            System.out.println("end1 "+c1.getPlanned_meeting().get(i).getEnd()+" end2: "+c2.getPlanned_meeting().get(j).getEnd());
-            System.out.println("Max "+ toUsualFormat(tmpMax)+" Min "+ toUsualFormat(tmpMin));
+
+            tmpMin = getMin((c1.getPlanned_meeting().get(i).getStartSec()),(c2.getPlanned_meeting().get(j).getStartSec()));
+
 
             dif = tmpMin - tmpMax;
 
 
-            if (dif/1800L>=1){
-                TimeStamps timeStamps = new TimeStamps();
-                timeStamps.setStart(toUsualFormat(tmpMax));
-                timeStamps.setEnd(toUsualFormat(tmpMin));
-                meeting.add(timeStamps);
+            if (dif/meetingDuration>=1){
+                meeting.add(new TimeStamps(toUsualFormat(tmpMax),toUsualFormat(tmpMin)));
             }
-            else              {
-                int ii = i-1, jj= j-1;
-                System.out.println("HELOOO "+ ii+" HII "+ jj);
-                if (getSeconds(c1.getPlanned_meeting().get(i).getStart())<
-                        getSeconds(c2.getPlanned_meeting().get(j).getStart())){
-                    System.out.println("-j");
+            else  {
+
+                if (c1.getPlanned_meeting().get(i).getStartSec()<
+                        c2.getPlanned_meeting().get(j).getStartSec()){
+
                     j--;
                 }
                 else {
-                    System.out.println("-i");
+
                     i--;
                 }
             }
 
-            System.out.println(meeting);
+           // System.out.println(meeting);
             if (i<0)
-                tmpMax = getMax(getSeconds(c1.getWorking_hours().getStart()), getSeconds(c2.getPlanned_meeting().get(j).getEnd()));
+                tmpMax = getMax(c1.getWorking_hours().getStartSec(), c2.getPlanned_meeting().get(j).getEndSec());
             else if (j<0)
-                tmpMax = getMax(getSeconds(c2.getWorking_hours().getStart()), getSeconds(c1.getPlanned_meeting().get(i).getEnd()));
+                tmpMax = getMax(c2.getWorking_hours().getStartSec(), c1.getPlanned_meeting().get(i).getEndSec());
             else
-                tmpMax = getMax(getSeconds(c1.getPlanned_meeting().get(i).getEnd()), getSeconds(c2.getPlanned_meeting().get(j).getEnd()));
+                tmpMax = getMax(c1.getPlanned_meeting().get(i).getEndSec(), c2.getPlanned_meeting().get(j).getEndSec());
 
-            if (i<(c1.getPlanned_meeting().size()))
+
             i++;
-            if (j<(c2.getPlanned_meeting().size()))
+
             j++;
 
         }
-        System.out.println("Max "+ toUsualFormat(tmpMax)+" Min "+ toUsualFormat(tmpMin));
-       // tmpMax
-                tmpMin = getMin(getSeconds(c1.getWorking_hours().getEnd()), getSeconds(c2.getWorking_hours().getEnd()));
+      //  System.out.println("Max "+ toUsualFormat(tmpMax)+" Min "+ toUsualFormat(tmpMin));
+
+        tmpMin = getMin(c1.getWorking_hours().getEndSec(), c2.getWorking_hours().getEndSec());
 
         dif = tmpMin - tmpMax;
 
-        if (dif/1800L>=1){
-            TimeStamps timeStamps = new TimeStamps();
-            timeStamps.setStart(toUsualFormat(tmpMax));
-            timeStamps.setEnd(toUsualFormat(tmpMin));
-            meeting.add(timeStamps);
-        }
-        System.out.println(meeting);
+        if (dif/meetingDuration>=1){
+            meeting.add(new TimeStamps(toUsualFormat(tmpMax),toUsualFormat(tmpMin)));
 
+        }
+
+        return meeting;
 
     }
 
-
-
-
-
-
-
-//        long tmpMin = getMin(getSeconds(c1.getPlanned_meeting().get(0).getStart()),getSeconds(c2.getPlanned_meeting().get(0).getStart()));
-//        System.out.println("Max "+ tmpMax+" Min "+ tmpMin);
-//
-//        long dif = tmpMin - tmpMax;
-//        if (dif/1800L>=1){
-//            TimeStamps timeStamps = new TimeStamps();
-//            timeStamps.setStart(String.valueOf(tmpMax));
-//            timeStamps.setEnd(String.valueOf(tmpMin));
-//            meeting.add(timeStamps);
-//        }
-//        for (int i = 0; i < c1.getPlanned_meeting().size()-1;i++){
-//             tmpMax = getMax(getSeconds(c1.getPlanned_meeting().get(0).getEnd()), getSeconds(c2.getPlanned_meeting().get(0).getEnd()));
-//             tmpMin = getMin(getSeconds(c1.getPlanned_meeting().get(i+1).getStart()),getSeconds(c2.getPlanned_meeting().get(i+1).getStart()));
-//            dif = tmpMin - tmpMax;
-//            if (dif/1800L>=1){
-//                TimeStamps timeStamps = new TimeStamps();
-//                timeStamps.setStart(String.valueOf(tmpMax));
-//                timeStamps.setEnd(String.valueOf(tmpMin));
-//                meeting.add(timeStamps);
-//            }
-//            System.out.println("Max "+ tmpMax+" Min "+ tmpMin);}
-//    }
 
     public  String toUsualFormat (long time){
         String usFormat = Long.toString(time/3600)+":"+(((time%3600)/60==0)?"00":(time%3600)/60);

@@ -4,8 +4,15 @@ public class TimeStamps {
     private  String start;
    private String end;
 
+    public TimeStamps() {
+    }
 
-//   public long getSeconds (String time){
+    public TimeStamps(String start, String end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    //   public long getSeconds (String time){
 //        long timeSec;
 //        timeSec = Integer.parseInt(time.split(":")[0])* 3600L +Integer.parseInt(time.split(":")[1])* 60L;
 //        return timeSec;
@@ -40,7 +47,7 @@ public class TimeStamps {
 
     @Override
     public String toString() {
-        return "TimeStamps{" +
+        return "{" +
                 "start='" + start + '\'' +
                 ", end='" + end + '\'' +
                 '}';

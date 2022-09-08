@@ -24,9 +24,9 @@ public class Calendar {
 
     @Override
     public String toString() {
-        return "Calendar{" +
+        return "\tCalendar{\n" +
                 "working_hours=" + working_hours +
-                ", planned_meeting=" + planned_meeting +
-                '}';
+                ", \nplanned_meeting=" + planned_meeting +
+                "}\n";
     }
 }
