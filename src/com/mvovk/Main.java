@@ -31,9 +31,9 @@ public class Main {
         return calendar;
     }
     public static int readTheNum (String text){
-        int num =0;
+        int num =-1;
 
-        while (!(num>=1&&num<=5)){
+        while (!(num>=0&&num<=5)){
             System.out.println(text);
             try {
                 Scanner scan = new Scanner(System.in);
@@ -68,10 +68,11 @@ public class Main {
         return time;
     }
     public static void main(String[] args) {
-        while (true){
+        int num =-1;
+        while (num!=0){
         Calendar calendar1 ,calendar2 ;
 
-        int num ;
+
 
         num=readTheNum("Wybierz pierwszy kalendarz wpisując liczbę od 1 do 5:");
 
@@ -94,8 +95,9 @@ public class Main {
         System.out.println( solution.getSolution());
         while (num!=0&&num!=1) {
             num = readTheNum("\nPodaj 0, jeśli chcesz zakończyć, lub 1, jeśli chcesz kontynuować");
-            if (num == 0)
+            if (num == 0) {
                 break;
+            }
         }
         }
 
