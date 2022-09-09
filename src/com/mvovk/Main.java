@@ -92,11 +92,11 @@ public class Main {
 
         System.out.println("\nDostępne terminy spotkań:");
         System.out.println( solution.getSolution());
-        while (num!=0&&num!=1)
-            num=readTheNum("\nPodaj 0, jeśli chcesz zakończyć, lub 1, jeśli chcesz kontynuować");
-            if (num==0)
+        while (num!=0&&num!=1) {
+            num = readTheNum("\nPodaj 0, jeśli chcesz zakończyć, lub 1, jeśli chcesz kontynuować");
+            if (num == 0)
                 break;
-
+        }
         }
 
 
